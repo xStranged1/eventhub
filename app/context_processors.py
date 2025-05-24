@@ -1,5 +1,6 @@
 from .models import Notification
 
+
 def notification_icon(request):
     unread_count = 0  # Definimos por defecto
     if request.user.is_authenticated:

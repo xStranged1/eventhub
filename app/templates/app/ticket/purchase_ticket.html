@@ -20,6 +20,13 @@
           <!-- Cantidad -->
           <div class="mb-4">
             <label for="quantity" class="form-label">Cantidad de entradas</label>
+            {% if errors %}
+                        <ul class="alert alert-danger">
+                          {% for field, error in errors.items %}
+                            {{ error }}
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
             <div class="input-group">
               <button type="button" class="btn btn-outline-secondary" id="decrease-qty">−</button>
               <input type="number"
@@ -29,6 +36,8 @@
                      value="{{ ticket.quantity|default:1 }}"
                      min="1"
                      required>
+                     
+
               <button type="button" class="btn btn-outline-secondary" id="increase-qty">+</button>
             </div>
           </div>

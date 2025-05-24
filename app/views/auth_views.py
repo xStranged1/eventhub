@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 
 from app.models import User
 
+
 def register(request):
     if request.method == "POST":
         email = request.POST.get("email")

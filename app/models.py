@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import Sum
 from django.utils.crypto import get_random_string
 
 
@@ -268,7 +269,10 @@ class Ticket(models.Model):
             errors["quantity"] = "La cantidad debe ser un entero mayor o igual a 1."
         if ticket_type not in dict(cls.TICKET_TYPES):
             errors["type"] = "El tipo de ticket no es válido."
-        # por ejemplo, podrías validar stock con event.available_tickets aquí
+        # Check total tickets per user per event
+        existing_tickets = Ticket.objects.filter(user=user, event=event).aggregate(total_quantity=Sum('quantity'))['total_quantity'] or 0
+        if existing_tickets + quantity > 5:
+            errors["quantity"] = "No puedes comprar más de 5 entradas por evento."
         return errors
 
     @classmethod
@@ -283,7 +287,8 @@ class Ticket(models.Model):
             type=ticket_type
         )
         return True, ticket
-
+    
+    @classmethod
     def update(self, quantity=None, ticket_type=None):
         # Si no se pasa un parámetro, se mantiene el valor actual
         new_qty  = quantity    if quantity is not None    else self.quantity
@@ -297,7 +302,7 @@ class Ticket(models.Model):
         self.type     = new_type
         self.save()
         return True, None
-    
+
 class Notification(models.Model):
     title=models.CharField(max_length=200)
     massage=models.TextField()

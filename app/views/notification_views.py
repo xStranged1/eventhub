@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from app.form import NotificationForm
 from app.models import Event, Notification, User
-from app.views.rating_views import create_rating
+
 
 @login_required
 def notification_list(request):

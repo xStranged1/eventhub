@@ -1,6 +1,9 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 from django.shortcuts import get_object_or_404, redirect, render
+
 from ..models import Event, Ticket
+
 
 @login_required
 def my_tickets(request):
@@ -34,6 +37,13 @@ def purchase_ticket(request, event_id):
     if request.method == "POST":
         qty   = int(request.POST.get("quantity", 1))
         ttype = request.POST.get("type", "GENERAL")
+        existing_qty = Ticket.objects.filter(user=user, event=event).aggregate(total=Sum('quantity'))['total'] or 0
+        if existing_qty + qty > 5:
+            return render(request, "app/ticket/purchase_ticket.html", {
+                "event": event,
+                "errors": {"quantity": "No podes comprar más de 5 tickets para un mismo evento"},
+                "ticket_types": dict(Ticket.TICKET_TYPES).keys()
+            })
         success, result = Ticket.new(user, event, qty, ttype)
         if not success:
             # result es un dict de errores
