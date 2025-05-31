@@ -25,53 +25,28 @@ Aplicación web para venta de entradas utilizada en la cursada 2025 de Ingenier�
 ```
 pip install -r requirements.txt
 ```
-## Instalar Playwright
-```
-playwright install
+
+## Makefile
+`Makefile` tiene como objetivo facilitar la gestión de tareas comunes en el proyecto Django. 
+
+Para poder ejecutar `Makefile` en Windows es necesario instalar [Chocolatly](https://chocolatey.org/install#individual) y correr
+
+```bash
+choco install make
 ```
 
-## Iniciar la Base de Datos
+Se asocicia un comando, o una serie de comandos a un comando personalizado. Se pueden ejecutar comandos específicos con `make <target>`
 
-```
-python manage.py migrate
-```
-
-### Crear usuario admin
-
-```
-python manage.py createsuperuser
-```
-
-### Llenar la base de datos
-
-```
-python manage.py loaddata fixtures/events.json
-```
-
-## Iniciar app
-
-```
-python manage.py runserver
-```
-
-## Correr tests
-#### Todos los tests
-```
-python manage.py test app.test
-```
-#### Una clase de test
-```
-python manage.py test app.test.nombre.ClaseTest
-```
-#### Tests unitarios
-```
-python manage.py test app.test.test_unit
-```
-#### Tests de integracion
-```
-python manage.py test app.test.test_integration
-```
-#### Tests e2e
-```
-python manage.py test app.test.test_e2e
-```
+| Comando           | Descripción                                              |
+|-------------------|----------------------------------------------------------|
+| `make install`    | Instala las dependencias desde `requirements.txt`        |
+| `make playwright-install` | Instala las dependencias de Playwright                |
+| `make migrate`     | Aplica las migraciones a la base de datos                |
+| `make superuser`   | Crea un usuario administrador interactivo                |
+| `make loaddata`    | Carga los datos iniciales desde `fixtures/events.json`  |
+| `make run`         | Inicia el servidor de desarrollo (`runserver`)          |
+| `make test`        | Ejecuta todos los tests definidos en `app.test`         |
+| `make test-class CLASS=...` | Ejecuta una clase de tests específica (`ClaseTest`)     |
+| `make test-unit`   | Ejecuta los tests unitarios en `app.test.test_unit`     |
+| `make test-integration` | Ejecuta los tests de integración en `app.test.test_integration` |
+| `make test-e2e`    | Ejecuta los tests end-to-end en `app.test.test_e2e`     |
